@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_cwueAEm4EDu8EvTCL3ijDw" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:collaboration id="_5160EE4F-6640-4CBD-9529-16C46503A900" name="Default Collaboration">
+    <bpmn2:participant id="_5F52E3CC-DD92-434A-8ADD-1705C88814C0" name="Pool Participant" processRef="TimerProcess"/>
+  </bpmn2:collaboration>
+  <bpmn2:process id="TimerProcess" drools:packageName="com.it.sample" drools:version="1.0" drools:adHoc="false" name="TimerProcess" isExecutable="true" processType="Public">
+    <bpmn2:sequenceFlow id="_F7E10DFD-755F-41D4-8C42-B9E69410DA16" sourceRef="_9B648051-9F61-4648-987B-B23170550246" targetRef="_67DF6BAF-8381-41DA-91D8-64506006E195"/>
+    <bpmn2:sequenceFlow id="_01874687-3451-43FA-A138-32E07445BB49" sourceRef="_0AF32325-D217-43D5-BE12-C380908FDEBA" targetRef="_9B648051-9F61-4648-987B-B23170550246"/>
+    <bpmn2:scriptTask id="_9B648051-9F61-4648-987B-B23170550246" name="Notify Signal To Main Process With JMS" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Notify Signal To Main Process With JMS]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_01874687-3451-43FA-A138-32E07445BB49</bpmn2:incoming>
+      <bpmn2:outgoing>_F7E10DFD-755F-41D4-8C42-B9E69410DA16</bpmn2:outgoing>
+      <bpmn2:script>java.lang.String threadName = Thread.currentThread().getName();
+System.out.println("Thread Name: " + threadName + " - Message: Timer scattato");</bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="_67DF6BAF-8381-41DA-91D8-64506006E195" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[End]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_F7E10DFD-755F-41D4-8C42-B9E69410DA16</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:startEvent id="_0AF32325-D217-43D5-BE12-C380908FDEBA" name="Start Timer">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Timer]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_01874687-3451-43FA-A138-32E07445BB49</bpmn2:outgoing>
+      <bpmn2:timerEventDefinition>
+        <bpmn2:timeCycle xsi:type="bpmn2:tFormalExpression" language="none">R/PT180S</bpmn2:timeCycle>
+      </bpmn2:timerEventDefinition>
+    </bpmn2:startEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="TimerProcess">
+      <bpmndi:BPMNShape id="shape__0AF32325-D217-43D5-BE12-C380908FDEBA" bpmnElement="_0AF32325-D217-43D5-BE12-C380908FDEBA">
+        <dc:Bounds height="56" width="56" x="194" y="206"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__67DF6BAF-8381-41DA-91D8-64506006E195" bpmnElement="_67DF6BAF-8381-41DA-91D8-64506006E195">
+        <dc:Bounds height="56" width="56" x="758" y="206"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__9B648051-9F61-4648-987B-B23170550246" bpmnElement="_9B648051-9F61-4648-987B-B23170550246">
+        <dc:Bounds height="102" width="154" x="386" y="183"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_shape__0AF32325-D217-43D5-BE12-C380908FDEBA_to_shape__9B648051-9F61-4648-987B-B23170550246" bpmnElement="_01874687-3451-43FA-A138-32E07445BB49">
+        <di:waypoint x="222" y="234"/>
+        <di:waypoint x="463" y="234"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__9B648051-9F61-4648-987B-B23170550246_to_shape__67DF6BAF-8381-41DA-91D8-64506006E195" bpmnElement="_F7E10DFD-755F-41D4-8C42-B9E69410DA16">
+        <di:waypoint x="463" y="234"/>
+        <di:waypoint x="786" y="234"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters/>
+          <bpsim:ElementParameters elementRef="_0AF32325-D217-43D5-BE12-C380908FDEBA">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_9B648051-9F61-4648-987B-B23170550246">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_cwueAEm4EDu8EvTCL3ijDw</bpmn2:source>
+    <bpmn2:target>_cwueAEm4EDu8EvTCL3ijDw</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

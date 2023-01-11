@@ -1,0 +1,26 @@
+[
+    [
+        "name": "RandomNumberWorkItem",
+        "displayName": "RandomNumberWorkItem",
+        "category": "Custom Work Items",
+        "description": "Call to generate a random number with a work item handler",
+        "defaultHandler": "mvel: new com.it.sample.component.workitem.RandomNumberWorkItem()",
+        "parameters": [
+            "min": new IntegerDataType(),
+            "max": new IntegerDataType()
+        ],
+        "results": [
+            "randomNumber": new IntegerDataType()
+        ],
+        "icon": ""
+    ],
+    [
+        "name": "Milestone",
+        "displayName": "Milestone",
+        "category": "Milestone",
+        "icon": "defaultmilestoneicon.png",
+        "parameters": [
+            "Condition": new StringDataType()
+        ]
+    ]
+]
