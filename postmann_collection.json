@@ -1,0 +1,1317 @@
+{
+	"info": {
+		"_postman_id": "cfeec701-1eb2-4350-99c8-eda26881c4cd",
+		"name": "PAM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "jBPM Processes",
+			"item": [
+				{
+					"name": "Start Sample Process",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"processInstanceId\", jsonData.processInstanceId);",
+									"pm.collectionVariables.set(\"correlationKey\", jsonData.correlationKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"processName\", \"SampleProcess\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"processName\": \"SampleProcess\",\n\t\"correlationKey\": \"{{$guid}}\",\n\t\"params\": {\n\t\t\"min\": \"{{$randomInt}}\",\n\t\t\"max\": \"{{$randomInt}}\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/app/bpm/process/start",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"app",
+								"bpm",
+								"process",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wake Up Signal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"correlationKey\": \"{{correlationKey}}\",\n\t\"processInstanceId\": \"{{processInstanceId}}\",\n\t\"signalName\": \"WaitEvent\",\n\t\"processName\": \"{{processName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/app/bpm/process/wake-up-signal",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"app",
+								"bpm",
+								"process",
+								"wake-up-signal"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Engine API",
+			"item": [
+				{
+					"name": "Server",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{kieServerPassword}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{kieServerUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Info By Correlation Key",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/queries/processes/instance/correlation/:correlationKey",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"queries",
+								"processes",
+								"instance",
+								"correlation",
+								":correlationKey"
+							],
+							"variable": [
+								{
+									"key": "correlationKey",
+									"value": "{{correlationKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Containers",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Container By Container ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Release ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/release-id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"release-id"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/healthcheck?report=true",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"healthcheck"
+							],
+							"query": [
+								{
+									"key": "report",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ready Check",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/rest/server/readycheck",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"readycheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Server State",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/state",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"state"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Definitions By Process ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/definitions/:processId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"definitions",
+								":processId"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processId",
+									"value": "{{processName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current Values of Variables",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/variables/instances",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"variables",
+								"instances"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available Signals By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/signals",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"signals"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Nodes Instances By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/nodes/instances",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"nodes",
+								"instances"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Nodes By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/nodes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"nodes"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Active Nodes By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/admin/containers/:containerId/processes/instances/:processInstanceId/nodeinstances",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"admin",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"nodeinstances"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Instance Info By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Process Instanced By Container ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Processes By Container ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Timers By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/timers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"timers"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Execution Errors By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/instances/:processInstanceId/errors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"instances",
+								":processInstanceId",
+								"errors"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Process Image SVG By Process ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/images/processes/:processId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"images",
+								"processes",
+								":processId"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processId",
+									"value": "{{processName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Process Image SVG By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/images/processes/instances/:processInstanceId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"images",
+								"processes",
+								"instances",
+								":processInstanceId"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "1 (Active), 2 (Completed), 3 (Aborted), 4 (Terminated)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}"
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Variables",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/definitions/:processId/variables",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								"definitions",
+								":processId",
+								"variables"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "processId",
+									"value": "{{processName}}",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Call Signal By Process Instance ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/rest/server/containers/:containerId/processes/:processInstanceId/signal/:signalName",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"containers",
+								":containerId",
+								"processes",
+								":processInstanceId",
+								"signal",
+								":signalName"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{containerId}}",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "processInstanceId",
+									"value": "{{processInstanceId}}"
+								},
+								{
+									"key": "signalName",
+									"value": "WaitEvent"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create LogCleanupCommand Job",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"job-command\": \"org.jbpm.executor.commands.LogCleanupCommand\",\n\t\"scheduled-date\": {\n\t\t\"java.util.Date\": 1669193400000\n\t},\n\t\"request-data\": {\n\t\t\"SingleRun\": \"true\",\n\t\t\"RecordsPerTransaction\": \"100\",\n\t\t\"OlderThanPeriod\": \"1d\",\n\t\t\"SkipTaskLog\": \"false\",\n\t\t\"SkipExecutorLog\": \"false\",\n\t\t\"SkipProcessLog\": \"false\",\n\t\t\"NextRun\": \"15d\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/rest/server/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rest",
+								"server",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "correlationKey",
+			"value": "N/A",
+			"type": "default"
+		},
+		{
+			"key": "processInstanceId",
+			"value": "-1",
+			"type": "default"
+		},
+		{
+			"key": "kieServerUser",
+			"value": "user",
+			"type": "default"
+		},
+		{
+			"key": "kieServerPassword",
+			"value": "user",
+			"type": "default"
+		},
+		{
+			"key": "host",
+			"value": "http://localhost:8090",
+			"type": "default"
+		},
+		{
+			"key": "containerId",
+			"value": "com.it.sample:business-application-kjar:1.0",
+			"type": "default"
+		},
+		{
+			"key": "processName",
+			"value": "N/A",
+			"type": "default"
+		}
+	]
+}
